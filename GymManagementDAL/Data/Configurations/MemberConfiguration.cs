@@ -1,0 +1,21 @@
+﻿using GymManagementDAL.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace GymManagementDAL.Data.Configurations
+{
+    internal class MemberConfiguration : GymUserConfiguration<Member> , IEntityTypeConfiguration<Member>
+    {
+        public new void Configure(EntityTypeBuilder<Member> builder)
+        {
+            builder.Property(g=>g.CreatedAt)
+                .HasColumnName("JoinDate")
+                .HasDefaultValueSql("GETDATE()");
+
+            base.Configure(builder);
+        }
+    }
+}
