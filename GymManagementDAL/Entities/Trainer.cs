@@ -6,5 +6,7 @@ namespace GymManagementDAL.Entities
     {
         // HireDate == CreatedAt from BaseClass
         public Specialties Specialties { get; set; }
+
+        public ICollection<Session> TrainerSessions { get; set; } = null!;
     }
 }
