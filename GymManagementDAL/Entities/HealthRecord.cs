@@ -7,7 +7,7 @@ using System.Text;
 namespace GymManagementDAL.Entities
 {
     // 1-1 relationship with Member [shared pk]
-    internal class HealthRecord : BaseClass
+    public class HealthRecord : BaseClass
     {
         public  decimal Height { get; set; }
         public decimal Weight { get; set; }

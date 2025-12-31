@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GymManagementDAL.Entities
 {
-    internal class MemberSession : BaseClass
+    public class MemberSession : BaseClass
     {
         //BookingDate == CreatedAt from BaseClass
         public bool IsAttended { get; set; }

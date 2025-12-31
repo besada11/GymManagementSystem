@@ -7,7 +7,7 @@ using System.Text;
 
 namespace GymManagementDAL.Repositories.Classes
 {
-    internal class MemberRepository(GymDbContext _dbContext) : IMemberRepository
+    public class MemberRepository(GymDbContext _dbContext) : IMemberRepository
 
     {
         //Add

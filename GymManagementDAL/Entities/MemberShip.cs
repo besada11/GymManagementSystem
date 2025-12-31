@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GymManagementDAL.Entities
 {
-    internal class MemberShip : BaseClass
+    public class MemberShip : BaseClass
     {
         //StartDate == CreatedAt from BaseClass
         public DateTime EndDate { get; set; }

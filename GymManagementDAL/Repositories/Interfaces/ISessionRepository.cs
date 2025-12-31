@@ -5,21 +5,17 @@ using System.Text;
 
 namespace GymManagementDAL.Repositories.Interfaces
 {
-    public interface IMemberRepository
+    public interface ISessionRepository
     {
         //GetAll
-        IEnumerable<Member> GetAllMembers();
-
+        IEnumerable<Session> GetAllSessions();
         //GetById
-        Member? GetById(int id);    
-
+        Session? GetById(int id);
         //Add
-        int Add (Member member);
-
+        int Add(Session session);
         //Update
-        int Update(Member member);
-
+        int Update(Session session);
         //Delete
-        int Delete(Member member);
+        int Delete(Session session);
     }
 }

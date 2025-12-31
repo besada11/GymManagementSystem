@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GymManagementDAL.Entities
 {
-    internal class Member : GymUser
+    public class Member : GymUser
     {
         //JoinDate == CreatedAt from BaseClass
         public string? Photo { get; set; } = null!;

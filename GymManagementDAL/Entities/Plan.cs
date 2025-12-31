@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GymManagementDAL.Entities
 {
-    internal class Plan : BaseClass
+    public class Plan : BaseClass
     {
         public string Name { get; set; } = null!;
         public string Description { get; set; }=null!;
