@@ -21,10 +21,7 @@ namespace GymManagementPL
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            builder.Services.AddScoped<IMemberRepository, MemberRepository>();
-            builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
             builder.Services.AddScoped<IPlanRepository, PlanRepository>();
-            `builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
