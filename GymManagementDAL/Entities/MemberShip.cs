@@ -10,7 +10,7 @@ namespace GymManagementDAL.Entities
         //StartDate == CreatedAt from BaseClass
         public DateTime EndDate { get; set; }
         //Readondly property to check if the membership is active
-        public string status
+        public string Status
         {
             get
             {

@@ -5,7 +5,9 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class MemberService (IGenericRepository<Member> _memberRepository): IMemberService
+    internal class MemberService (IGenericRepository<Member> _memberRepository,
+        IGenericRepository<MemberShip> _memberShipRepository,
+        IPlanRepository _planRepository): IMemberService
     {
         //Add Member
         public bool CreateMember(CreateMemberVM createMemberVM)
@@ -65,6 +67,34 @@ namespace GymManagementBLL.Services.Classes
                 Gender = m.Gender.ToString()
             });
             return MemberVMs;
+        }
+
+        //Get MemberDetails By Id
+        public MemberVM? GetMemberDetails(int id)
+        {
+            var member = _memberRepository.GetById(id);
+            if (member == null) return null;
+            var memberVM = new MemberVM
+            {
+                Photo = member.Photo,
+                Name = member.Name,
+                Email = member.Email,
+                Phone = member.Phone,
+                Gender = member.Gender.ToString(),
+                DateOfBirth = member.DateOfBirth.ToShortDateString(),
+                Address = $"{member.Address.BuildingNumber} - {member.Address.Street} - {member.Address.City}"
+            };
+
+            //Active Membership
+            var activeMemberShip = _memberShipRepository.GetAll(ms => ms.MemberId == id && ms.Status == "Active").FirstOrDefault();
+            if (activeMemberShip != null)
+            {
+                memberVM.MemberShipStartDate = activeMemberShip.CreatedAt.ToShortDateString();
+                memberVM.MemberShipEndDate = activeMemberShip.EndDate.ToShortDateString();
+                var plan = _planRepository.GetById(activeMemberShip.PlanId);
+                memberVM.PlanName = plan?.Name;
+            }
+            return memberVM;
         }
     }
 }

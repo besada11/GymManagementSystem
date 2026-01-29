@@ -20,6 +20,7 @@ namespace GymManagementPL
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
             #region Dependency Injection
 
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
