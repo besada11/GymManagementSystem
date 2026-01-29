@@ -13,6 +13,11 @@ namespace GymManagementBLL.Services.Interfaces
         //Health Record 
         HealthRecordVM? GetMemberHealthRecord(int memberId);
 
+        //Get Member To Update
+        MemberToUpdateVM? GetMemberToUpdate(int memberId);
+
+        //Update Member
+        bool UpdateMemberDetails(int memberId, MemberToUpdateVM memberUpdated);
         //Delete Member
     }
 }

@@ -8,7 +8,7 @@ namespace GymManagementBLL.Services.Classes
     internal class MemberService (IGenericRepository<Member> _memberRepository,
         IGenericRepository<MemberShip> _memberShipRepository,
         IPlanRepository _planRepository,
-        IGenericRepository<HealthRecord> _healthRecordRepository): IMemberService
+        IGenericRepository<HealthRecord> _healthRecordRepository) : IMemberService
     {
         //Create Member
         public bool CreateMember(CreateMemberVM createMemberVM)
@@ -16,11 +16,9 @@ namespace GymManagementBLL.Services.Classes
             try
             {
                 //Check if Phone is exists
-                var phoneExists = _memberRepository.GetAll(m => m.Phone == createMemberVM.Phone).Any();
                 //Check Email is exists
-                var emailExists = _memberRepository.GetAll(m => m.Email == createMemberVM.Email).Any();
                 //if one of them exists return false
-                if (emailExists || phoneExists) return false;
+                if (IsEmailExists(createMemberVM.Email) || IsPhoneExists(createMemberVM.Phone)) return false;
 
                 //add new member
                 var result = _memberRepository.Add(new Member
@@ -113,5 +111,63 @@ namespace GymManagementBLL.Services.Classes
             };
             return healthRecordVM;
         }
+
+        //Get Member To Update
+        public MemberToUpdateVM? GetMemberToUpdate(int memberId)
+        {
+            var member = _memberRepository.GetById(memberId);
+            if(member == null) return null;
+            var memberToUpdateVM = new MemberToUpdateVM
+            {
+                Name = member.Name,
+                Photo = member.Photo,
+                Email = member.Email,
+                Phone = member.Phone,
+                BuildingNumber = member.Address.BuildingNumber,
+                Street = member.Address.Street,
+                City = member.Address.City
+            };
+            return memberToUpdateVM;
+        }
+
+        //Update Member Details
+        public bool UpdateMemberDetails(int memberId, MemberToUpdateVM memberUpdated)
+        {
+            try
+            {
+               if (IsEmailExists(memberUpdated.Email) || IsPhoneExists(memberUpdated.Phone)) return false;
+
+                var Member = _memberRepository.GetById(memberId);
+                if (Member == null) return false;
+
+                Member.Name = memberUpdated.Name;
+                Member.Photo = memberUpdated.Photo;
+                Member.Email = memberUpdated.Email;
+                Member.Phone = memberUpdated.Phone;
+                Member.Address.BuildingNumber = memberUpdated.BuildingNumber;
+                Member.Address.Street = memberUpdated.Street;
+                Member.Address.City = memberUpdated.City;
+                Member.UpdatedAt = DateTime.Now;
+
+                return _memberRepository.Update(Member) > 0;
+       
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        #region Helper Methods
+        private bool IsEmailExists(string email)
+        {
+            return _memberRepository.GetAll(m => m.Email == email).Any();
+        }
+
+        private bool IsPhoneExists(string phone)
+        {
+            return _memberRepository.GetAll(m => m.Phone == phone).Any();
+        }
+        #endregion
     }
 }
