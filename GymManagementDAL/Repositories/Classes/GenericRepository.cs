@@ -8,18 +8,13 @@ namespace GymManagementDAL.Repositories.Classes
     public class GenericRepository<TEntity>(GymDbContext _dbContext) : IGenericRepository<TEntity> where TEntity : BaseClass , new()
     {
         //Add Entity
-        public int Add(TEntity entity)
-        {
-            _dbContext.Set<TEntity>().Add(entity);
-            return _dbContext.SaveChanges();
-        }
+        public void Add(TEntity entity) => _dbContext.Set<TEntity>().Add(entity);
+
+
 
         //Delete Entity
-        public int Delete(TEntity entity)
-        {
-            _dbContext.Set<TEntity>().Remove(entity);
-            return _dbContext.SaveChanges();
-        }
+        public void Delete(TEntity entity) => _dbContext.Set<TEntity>().Remove(entity);
+
 
         //Get All Entities
         public IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null)
@@ -36,10 +31,8 @@ namespace GymManagementDAL.Repositories.Classes
         }
 
         //Update Entity
-        public int Update(TEntity entity)
-        {
-            _dbContext.Set<TEntity>().Update(entity);
-            return _dbContext.SaveChanges();
-        }
+        public void Update(TEntity entity) => _dbContext.Set<TEntity>().Update(entity);
+
+
     }
 }

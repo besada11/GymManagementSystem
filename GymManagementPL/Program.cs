@@ -23,8 +23,7 @@ namespace GymManagementPL
 
             #region Dependency Injection
 
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
            
             #endregion
             // Configure the HTTP request pipeline.
