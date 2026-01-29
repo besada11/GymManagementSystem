@@ -6,10 +6,13 @@ namespace GymManagementBLL.Services.Interfaces
     {
         //Get All Members
         IEnumerable<MemberVM> GetAllMembers();
+
         //Get MemberDetails By Id
         MemberVM? GetMemberDetails(int id);
+
         //Create Member
         bool CreateMember(CreateMemberVM createMemberVM);
+
         //Health Record 
         HealthRecordVM? GetMemberHealthRecord(int memberId);
 
@@ -18,6 +21,8 @@ namespace GymManagementBLL.Services.Interfaces
 
         //Update Member
         bool UpdateMemberDetails(int memberId, MemberToUpdateVM memberUpdated);
+
         //Delete Member
+        bool DeleteMember(int memberId);
     }
 }

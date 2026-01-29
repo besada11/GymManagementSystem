@@ -8,7 +8,8 @@ namespace GymManagementBLL.Services.Classes
     internal class MemberService (IGenericRepository<Member> _memberRepository,
         IGenericRepository<MemberShip> _memberShipRepository,
         IPlanRepository _planRepository,
-        IGenericRepository<HealthRecord> _healthRecordRepository) : IMemberService
+        IGenericRepository<HealthRecord> _healthRecordRepository,
+        IGenericRepository<MemberSession> _memberSessionRepository) : IMemberService
     {
         //Create Member
         public bool CreateMember(CreateMemberVM createMemberVM)
@@ -48,6 +49,35 @@ namespace GymManagementBLL.Services.Classes
             {
                 return false;
             }
+        }
+
+        //Delete Member
+        public bool DeleteMember(int memberId)
+        {
+            var member = _memberRepository.GetById(memberId);
+            if (member == null) return false;
+            var HasActiveMemberSession = _memberSessionRepository
+                .GetAll(ms => ms.MemberId == memberId && ms.Session.StartDate > DateTime.Now).Any();
+            
+            if (HasActiveMemberSession) return false;
+
+            var memberShips = _memberShipRepository.GetAll(ms => ms.MemberId == memberId);
+            try
+            {
+                if(memberShips.Any())
+                {
+                    foreach (var memberShip in memberShips)
+                    {
+                        _memberShipRepository.Delete(memberShip);
+                    }
+                }
+                return _memberRepository.Delete(member) > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
         }
 
         //Get All Members
