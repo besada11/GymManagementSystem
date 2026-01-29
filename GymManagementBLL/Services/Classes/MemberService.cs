@@ -70,7 +70,7 @@ namespace GymManagementBLL.Services.Classes
                         MemberShipRepo.Delete(memberShip);
                     }
                 }
-                MemberRepo.Delete(member) ;
+                MemberRepo.Delete(member);
                 return _unitOfWork.SaveChanges() > 0;
             }
             catch (Exception)
