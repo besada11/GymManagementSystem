@@ -8,7 +8,7 @@ namespace GymManagementDAL.Repositories.Interfaces
     public interface IGenericRepository<TEntity> where TEntity : BaseClass , new()
     {
         //Get All
-        IEnumerable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null);
 
         //Get By Id
         TEntity? GetById(int id);

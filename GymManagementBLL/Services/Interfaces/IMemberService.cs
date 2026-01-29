@@ -9,7 +9,7 @@ namespace GymManagementBLL.Services.Interfaces
         //Get Member By Id
 
         //Add Member
-
+        bool CreateMember(CreateMemberVM createMemberVM);
         //Update Member
 
         //Delete Member
