@@ -7,9 +7,10 @@ namespace GymManagementBLL.Services.Classes
 {
     internal class MemberService (IGenericRepository<Member> _memberRepository,
         IGenericRepository<MemberShip> _memberShipRepository,
-        IPlanRepository _planRepository): IMemberService
+        IPlanRepository _planRepository,
+        IGenericRepository<HealthRecord> _healthRecordRepository): IMemberService
     {
-        //Add Member
+        //Create Member
         public bool CreateMember(CreateMemberVM createMemberVM)
         {
             try
@@ -69,7 +70,7 @@ namespace GymManagementBLL.Services.Classes
             return MemberVMs;
         }
 
-        //Get MemberDetails By Id
+        //Get Member Details By Id
         public MemberVM? GetMemberDetails(int id)
         {
             var member = _memberRepository.GetById(id);
@@ -95,6 +96,22 @@ namespace GymManagementBLL.Services.Classes
                 memberVM.PlanName = plan?.Name;
             }
             return memberVM;
+        }
+
+        //Get Health Record details
+        public HealthRecordVM? GetMemberHealthRecord(int memberId)
+        {
+           var memberHealthRecord = _healthRecordRepository.GetById(memberId);
+           
+            if(memberHealthRecord == null) return null;
+            var healthRecordVM = new HealthRecordVM
+            {
+                Height = memberHealthRecord.Height,
+                Weight = memberHealthRecord.Weight,
+                BloodType = memberHealthRecord.BloodType,
+                Notes = memberHealthRecord.Note
+            };
+            return healthRecordVM;
         }
     }
 }

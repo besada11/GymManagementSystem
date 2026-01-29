@@ -8,9 +8,10 @@ namespace GymManagementBLL.Services.Interfaces
         IEnumerable<MemberVM> GetAllMembers();
         //Get MemberDetails By Id
         MemberVM? GetMemberDetails(int id);
-        //Add Member
+        //Create Member
         bool CreateMember(CreateMemberVM createMemberVM);
-        //Update Member
+        //Health Record 
+        HealthRecordVM? GetMemberHealthRecord(int memberId);
 
         //Delete Member
     }
