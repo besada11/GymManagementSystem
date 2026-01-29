@@ -20,9 +20,12 @@ namespace GymManagementPL
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            #region Dependency Injection
 
+            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<IPlanRepository, PlanRepository>();
-
+           
+            #endregion
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {

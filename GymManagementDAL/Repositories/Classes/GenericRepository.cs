@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GymManagementDAL.Repositories.Classes
 {
-    internal class GenericRepository<TEntity>(GymDbContext _dbContext) : IGenericRepository<TEntity> where TEntity : BaseClass , new()
+    public class GenericRepository<TEntity>(GymDbContext _dbContext) : IGenericRepository<TEntity> where TEntity : BaseClass , new()
     {
         public int Add(TEntity entity)
         {

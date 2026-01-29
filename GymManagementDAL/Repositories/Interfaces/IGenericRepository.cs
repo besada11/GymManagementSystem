@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GymManagementDAL.Repositories.Interfaces
 {
-    internal interface IGenericRepository<TEntity> where TEntity : BaseClass , new()
+    public interface IGenericRepository<TEntity> where TEntity : BaseClass , new()
     {
         //Get All
         IEnumerable<TEntity> GetAll();
