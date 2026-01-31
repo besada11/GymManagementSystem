@@ -1,31 +1,38 @@
-﻿using GymManagementBLL.Services.Interfaces;
+﻿using AutoMapper;
+using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.SessionViewModels;
-using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace GymManagementBLL.Services.Classes
 {
-    public class SessionService(IUnitOfWork _unitOfWork) : ISessionService
+    public class SessionService(IUnitOfWork _unitOfWork , IMapper _mapper) : ISessionService
     {
+        //Gets all sessions
         public IEnumerable<SessionVM> GetAllSessions()
         {
             var Sessions = _unitOfWork.SessionRepository.GetAllSessionsWithTrainerAndCategory();
             if (!Sessions.Any()) return [];
-            return Sessions.Select(s => new SessionVM
+
+            //mapping sessions to sessionVM
+            var mapSessions = _mapper.Map<IEnumerable<SessionVM>>(Sessions);
+            foreach (var session in mapSessions)
             {
-               Id=s.Id,
-               Description=s.Description,
-               StartDate=s.StartDate,
-                EndDate=s.EndDate,
-                Capacity=s.Capacity,
-                CategoryName=s.SessionCategory.CategoryName,
-                TrainerName=s.SessionTrainer.Name,
-                AvailableSlots=s.Capacity - _unitOfWork.SessionRepository.GetAvailableSessions(s.Id),
-            });
+                session.AvailableSlots = session.Capacity - _unitOfWork.SessionRepository.GetAvailableSessions(session.Id);
+            }
+            return mapSessions;
+        }
+
+        //Get Session Details
+        public SessionVM? GetSessionByID(int id)
+        {
+            var session = _unitOfWork.SessionRepository.GetSessionByIDWithTrainerAndCategory(id);
+            if(session == null) return null;
+           
+            //mapping session to sessionVM
+            var mapSession = _mapper.Map<SessionVM>(session);
+            mapSession.AvailableSlots = mapSession.Capacity - _unitOfWork.SessionRepository.GetAvailableSessions(session.Id);
+            return mapSession;
         }
     }
 }

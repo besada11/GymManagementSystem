@@ -10,6 +10,8 @@ namespace GymManagementBLL.Services.Interfaces
         //Gets all sessions
         IEnumerable<SessionVM> GetAllSessions();
 
+        //Get Session Details 
+        SessionVM? GetSessionByID(int id);
 
     }
 }

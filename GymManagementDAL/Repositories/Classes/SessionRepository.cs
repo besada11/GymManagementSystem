@@ -16,14 +16,25 @@ namespace GymManagementDAL.Repositories.Classes
         {
             _dbContext= dbContext;
         }
+
+        // Get all sessions with trainer and category
         public IEnumerable<Session> GetAllSessionsWithTrainerAndCategory()
         {
             return _dbContext.Sessions.Include(s => s.SessionTrainer).Include(s => s.SessionCategory).ToList();
         }
 
+        // Get available sessions by session ID
         public int GetAvailableSessions(int sessionId)
         {
            return _dbContext.MemberSessions.Count(x=>x.SessionId==sessionId);
+        }
+
+        // Get session by ID with trainer and category
+        public Session? GetSessionByIDWithTrainerAndCategory(int sessionId)
+        {
+            return _dbContext.Sessions.Include(s => s.SessionTrainer)
+                                      .Include(s => s.SessionCategory)
+                                      .FirstOrDefault(s => s.Id == sessionId);
         }
     }
 }
