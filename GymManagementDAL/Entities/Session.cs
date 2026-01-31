@@ -22,9 +22,5 @@ namespace GymManagementDAL.Entities
 
         //Relationship Session - MemberSession (One to Many)
         public ICollection<MemberSession> SessionMembers { get; set; } = null!;
-
-
-
-
     }
 }

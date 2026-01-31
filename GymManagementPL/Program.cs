@@ -23,6 +23,7 @@ namespace GymManagementPL
             });
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
 
             #region Database Seeding
