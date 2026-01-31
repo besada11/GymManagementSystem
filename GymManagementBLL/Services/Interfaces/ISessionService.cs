@@ -13,5 +13,10 @@ namespace GymManagementBLL.Services.Interfaces
         //Get Session Details 
         SessionVM? GetSessionByID(int id);
 
+        //Create Session    
+        bool CreateSession(CreateSessionVM createSession);
+
+        //Update Session
+        //bool UpdateSession(UpdateSessionVM updateSession);
     }
 }
