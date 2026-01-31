@@ -109,6 +109,26 @@ namespace GymManagementBLL.Services.Classes
             }
         }
 
+        //Delete Session
+        public bool DeleteSession(int id)
+        {
+            try
+            {
+                var session = _unitOfWork.SessionRepository.GetById(id);
+                if (!IsSessionAvailableToRemove(session!))
+                    return false;
+                _unitOfWork.SessionRepository.Delete(session);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Delete session failed: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
         #region Helpers
 
         //Check if trainer exists
@@ -149,6 +169,26 @@ namespace GymManagementBLL.Services.Classes
 
             return true;
         }
+
+        //Is Session Available To Remove
+        private bool IsSessionAvailableToRemove(Session session)
+        {
+            //if session not null - no remove
+            if (session == null) return false;
+
+            //if session started - no remove
+            if (session.StartDate <= DateTime.Now && session.EndDate > DateTime.Now) return false;
+
+            //if session is Upcoming - no remove
+            if (session.StartDate > DateTime.Now) return false;
+
+            //if session has active booking - no remove
+            var activeBookings = _unitOfWork.SessionRepository.GetAvailableSessions(session.Id);
+            if (activeBookings > 0) return false;
+
+            return true;
+        }
+
         #endregion
     }
 }
