@@ -17,6 +17,7 @@ namespace GymManagementBLL
                 .ForMember(dest=>dest.AvailableSlots, option => option.Ignore());   
 
             CreateMap<CreateSessionVM, Session>();
+            CreateMap<Session , UpdateSessionVM>().ReverseMap();
 
         }
     }

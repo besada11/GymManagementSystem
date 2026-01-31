@@ -70,6 +70,44 @@ namespace GymManagementBLL.Services.Classes
             }
         }
 
+        //To Update Session
+        public UpdateSessionVM? GetSessionToUpdate(int id)
+        {
+            var session = _unitOfWork.SessionRepository.GetById(id);
+            if(!IsSessionAvailableToUpdate(session!))
+                return null;
+            //Mapping Session to UpdateSessionVM
+            var mapSession = _mapper.Map<UpdateSessionVM>(session);
+            return mapSession;
+        }
+
+        //Update Session
+        public bool UpdateSession(UpdateSessionVM updateSession, int id)
+        {
+            try
+            {
+                var session = _unitOfWork.SessionRepository.GetById(id);
+                if (!IsSessionAvailableToUpdate(session!))
+                    return false;
+                //Check if Trainer Exists
+                if (TrainerExists(updateSession.TrainerId) == false)
+                    return false;
+                //check if start date is before end date
+                if (IsValidSessionDates(updateSession.StartDate, updateSession.EndDate) == false)
+                    return false;
+                //Mapping UpdateSessionVM to Session entity
+                _mapper.Map(updateSession, session);
+                session!.UpdatedAt = DateTime.Now;
+
+                _unitOfWork.SessionRepository.Update(session);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Update session failed: {ex.Message}");
+                return false;
+            }
+        }
 
         #region Helpers
 
@@ -93,6 +131,24 @@ namespace GymManagementBLL.Services.Classes
             return startDate < endDate;
         }
 
+        //Is Session Available To Update
+        private bool IsSessionAvailableToUpdate(Session session)
+        {
+            //if session not null - no update
+            if (session == null) return false;
+
+            //if session completed - no update
+            if (session.EndDate < DateTime.Now) return false;
+
+            //if session started - no update
+            if (session.StartDate <= DateTime.Now) return false;
+
+            //if session has active booking - no update
+            var activeBookings = _unitOfWork.SessionRepository.GetAvailableSessions(session.Id);
+            if (activeBookings > 0) return false;
+
+            return true;
+        }
         #endregion
     }
 }

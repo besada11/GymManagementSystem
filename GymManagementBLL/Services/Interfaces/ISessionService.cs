@@ -16,7 +16,10 @@ namespace GymManagementBLL.Services.Interfaces
         //Create Session    
         bool CreateSession(CreateSessionVM createSession);
 
+        //To Update Session
+        UpdateSessionVM? GetSessionToUpdate(int id);
+
         //Update Session
-        //bool UpdateSession(UpdateSessionVM updateSession);
+        bool UpdateSession(UpdateSessionVM updateSession , int id);
     }
 }
