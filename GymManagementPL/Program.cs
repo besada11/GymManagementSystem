@@ -15,9 +15,6 @@ namespace GymManagementPL
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
-            var app = builder.Build(); 
-
             builder.Services.AddDbContext<GymDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -27,6 +24,7 @@ namespace GymManagementPL
             builder.Services.AddScoped<ISessionRepository, SessionRepository>();
             builder.Services.AddAutoMapper(X => X.AddProfile(new MappingProfiles()));
 
+            var app = builder.Build(); 
 
             #region Database Seeding
 
