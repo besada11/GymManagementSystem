@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GymManagementBLL.ViewModels.MemberViewModels
 {
-    internal class HealthRecordVM
+    public class HealthRecordVM
     {
         [Required(ErrorMessage = "Height is required")]
         [Range(0.1, 300, ErrorMessage = "Height Must Be Between 0.1 and 300 Cm")]

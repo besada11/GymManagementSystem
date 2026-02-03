@@ -6,7 +6,7 @@ using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class MemberService (IUnitOfWork _unitOfWork , IMapper _mapper) : IMemberService
+    public class MemberService (IUnitOfWork _unitOfWork , IMapper _mapper) : IMemberService
     {
         //Create Member
         public bool CreateMember(CreateMemberVM createMemberVM)
@@ -66,7 +66,7 @@ namespace GymManagementBLL.Services.Classes
         public IEnumerable<MemberVM> GetAllMembers()
         {
             var members = _unitOfWork.GetRepository<Member>().GetAll();
-            if (members == null || members.Any()) return [];
+            if (members == null || !members.Any()) return [];
 
             var MemberVMs = _mapper.Map<IEnumerable<MemberVM>>(members);
             return MemberVMs;

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GymManagementBLL.ViewModels.MemberViewModels
 {
-    internal class MemberToUpdateVM
+    public class MemberToUpdateVM
     {
         public string Name { get; set; } = null!;
         public string? Photo { get; set; }

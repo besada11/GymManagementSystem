@@ -3,7 +3,7 @@ using System.Security.Principal;
 
 namespace GymManagementBLL.ViewModels.MemberViewModels
 {
-    internal class MemberVM
+    public class MemberVM
     {
         public int Id { get; set; }
         public string? Photo { get; set; }
