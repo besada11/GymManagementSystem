@@ -1,4 +1,5 @@
-﻿using GymManagementBLL.Services.Interfaces;
+﻿using AutoMapper;
+using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.PlanViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class PlanService(IUnitOfWork _unitOfWork) : IPlanService
+    internal class PlanService(IUnitOfWork _unitOfWork , IMapper _mapper) : IPlanService
     {
         //Get All Plans
         public IEnumerable<PlanVM> GetAllPlan()
@@ -19,16 +20,8 @@ namespace GymManagementBLL.Services.Classes
                 // Handle no plans found
                 return [];
             }
-            return plans.Select(plan => new PlanVM
-            {
-                Id = plan.Id,
-                Name = plan.Name,
-                Description = plan.Description,
-                DurationDays = plan.DurationDays,
-                Price = plan.Price,
-                IsActive = plan.IsActive
-            }).ToList();
-
+            var plan = _mapper.Map<IEnumerable<PlanVM>>(plans);
+            return plan;
         }
 
         //Get Plan By Id
@@ -39,15 +32,8 @@ namespace GymManagementBLL.Services.Classes
             {
                 return null; 
             }
-            return new PlanVM
-            {
-                Id = plan.Id,
-                Name = plan.Name,
-                Description = plan.Description,
-                DurationDays = plan.DurationDays,
-                Price = plan.Price,
-                IsActive = plan.IsActive
-            };
+            var planVM = _mapper.Map<PlanVM>(plan);
+            return planVM;
 
         }
 
@@ -59,14 +45,9 @@ namespace GymManagementBLL.Services.Classes
             {
                 return null;
             }
+            var updatePlanVM = _mapper.Map<UpdatePlanVM>(plan);
+            return updatePlanVM;
 
-            return new UpdatePlanVM
-            {
-                Description = plan.Description,
-                DurationDays = plan.DurationDays,
-                Price = plan.Price,
-               PlanName= plan.Name
-            };
         }
 
         //SoftDelete Plan
@@ -98,8 +79,7 @@ namespace GymManagementBLL.Services.Classes
                 return false;
             try
             {
-                (plan.Description, plan.Price, plan.DurationDays, plan.UpdatedAt)
-                 = (updatedPlan.Description, updatedPlan.Price, updatedPlan.DurationDays, DateTime.Now);
+                _mapper.Map(updatedPlan, plan); 
                 _unitOfWork.GetRepository<Plan>().Update(plan);
                 return _unitOfWork.SaveChanges() > 0;
             }

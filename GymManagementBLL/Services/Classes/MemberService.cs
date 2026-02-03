@@ -1,11 +1,12 @@
-﻿using GymManagementBLL.Services.Interfaces;
+﻿using AutoMapper;
+using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.MemberViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class MemberService (IUnitOfWork _unitOfWork) : IMemberService
+    internal class MemberService (IUnitOfWork _unitOfWork , IMapper _mapper) : IMemberService
     {
         //Create Member
         public bool CreateMember(CreateMemberVM createMemberVM)
@@ -18,27 +19,8 @@ namespace GymManagementBLL.Services.Classes
                 if (IsEmailExists(createMemberVM.Email) || IsPhoneExists(createMemberVM.Phone)) return false;
 
                 //add new member
-                 _unitOfWork.GetRepository<Member>().Add(new Member
-                {
-                    Name = createMemberVM.Name,
-                    Email = createMemberVM.Email,
-                    Phone = createMemberVM.Phone,
-                    Gender = createMemberVM.Gender,
-                    DateOfBirth = createMemberVM.DateOfBirth,
-                    Address = new Address
-                    {
-                        BuildingNumber = createMemberVM.BuildingNumber,
-                        Street = createMemberVM.Street,
-                        City = createMemberVM.City
-                    },
-                    HealthRecord = new HealthRecord
-                    {
-                        Weight = createMemberVM.HealthRecordVM.Weight,
-                        Height = createMemberVM.HealthRecordVM.Height,
-                        BloodType = createMemberVM.HealthRecordVM.BloodType,
-                        Note = createMemberVM.HealthRecordVM.Notes
-                    }
-                });
+                var memper = _mapper.Map<Member>(createMemberVM);
+                 _unitOfWork.GetRepository<Member>().Add(memper);
                 return _unitOfWork.SaveChanges()>0;
             } 
             catch (Exception)
@@ -86,15 +68,7 @@ namespace GymManagementBLL.Services.Classes
             var members = _unitOfWork.GetRepository<Member>().GetAll();
             if (members == null || members.Any()) return [];
 
-            var MemberVMs = members.Select(m => new MemberVM
-            {
-                Id = m.Id,
-                Photo = m.Photo,
-                Name = m.Name,
-                Email = m.Email,
-                Phone = m.Phone,
-                Gender = m.Gender.ToString()
-            });
+            var MemberVMs = _mapper.Map<IEnumerable<MemberVM>>(members);
             return MemberVMs;
         }
 
@@ -103,16 +77,7 @@ namespace GymManagementBLL.Services.Classes
         {
             var member = _unitOfWork.GetRepository<Member>().GetById(id);
             if (member == null) return null;
-            var memberVM = new MemberVM
-            {
-                Photo = member.Photo,
-                Name = member.Name,
-                Email = member.Email,
-                Phone = member.Phone,
-                Gender = member.Gender.ToString(),
-                DateOfBirth = member.DateOfBirth.ToShortDateString(),
-                Address = $"{member.Address.BuildingNumber} - {member.Address.Street} - {member.Address.City}"
-            };
+            var memberVM =_mapper.Map<MemberVM>(member);    
 
             //Active Membership
             var activeMemberShip = _unitOfWork.GetRepository<MemberShip>().GetAll(ms => ms.MemberId == id && ms.Status == "Active").FirstOrDefault();
@@ -132,13 +97,7 @@ namespace GymManagementBLL.Services.Classes
            var memberHealthRecord = _unitOfWork.GetRepository<HealthRecord>().GetById(memberId);
            
             if(memberHealthRecord == null) return null;
-            var healthRecordVM = new HealthRecordVM
-            {
-                Height = memberHealthRecord.Height,
-                Weight = memberHealthRecord.Weight,
-                BloodType = memberHealthRecord.BloodType,
-                Notes = memberHealthRecord.Note
-            };
+            var healthRecordVM =_mapper.Map<HealthRecordVM>(memberHealthRecord);
             return healthRecordVM;
         }
 
@@ -147,16 +106,7 @@ namespace GymManagementBLL.Services.Classes
         {
             var member = _unitOfWork.GetRepository<Member>().GetById(memberId);
             if(member == null) return null;
-            var memberToUpdateVM = new MemberToUpdateVM
-            {
-                Name = member.Name,
-                Photo = member.Photo,
-                Email = member.Email,
-                Phone = member.Phone,
-                BuildingNumber = member.Address.BuildingNumber,
-                Street = member.Address.Street,
-                City = member.Address.City
-            };
+            var memberToUpdateVM = _mapper.Map<MemberToUpdateVM>(member);
             return memberToUpdateVM;
         }
 
@@ -170,16 +120,8 @@ namespace GymManagementBLL.Services.Classes
                 var Member = _unitOfWork.GetRepository<Member>().GetById(memberId);
                 if (Member == null) return false;
 
-                Member.Name = memberUpdated.Name;
-                Member.Photo = memberUpdated.Photo;
-                Member.Email = memberUpdated.Email;
-                Member.Phone = memberUpdated.Phone;
-                Member.Address.BuildingNumber = memberUpdated.BuildingNumber;
-                Member.Address.Street = memberUpdated.Street;
-                Member.Address.City = memberUpdated.City;
-                Member.UpdatedAt = DateTime.Now;
-
-                 _unitOfWork.GetRepository<Member>().Update(Member);
+                 _mapper.Map(memberUpdated, Member);
+                _unitOfWork.GetRepository<Member>().Update(Member);
                 return _unitOfWork.SaveChanges() > 0;
        
             }
