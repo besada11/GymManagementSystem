@@ -16,7 +16,7 @@ namespace GymManagementBLL.Services.Classes
             {
                 ActiveMember = _unitOfWork.GetRepository<MemberShip>().GetAll(m => m.Status=="Active").Count(),
                 TotalTariner = _unitOfWork.GetRepository<Trainer>().GetAll().Count(),
-                TotalMember = _unitOfWork.GetRepository<MemberShip>().GetAll().Count(),
+                TotalMember = _unitOfWork.GetRepository<Member>().GetAll().Count(),
                 UpcomingSession = SessionRepo.Count(s => s.StartDate > DateTime.Now),
                 OngoingSession = SessionRepo.Count(s => s.StartDate <= DateTime.Now && s.EndDate >= DateTime.Now),  
                 CompletedSession = SessionRepo.Count(s => s.EndDate < DateTime.Now)
