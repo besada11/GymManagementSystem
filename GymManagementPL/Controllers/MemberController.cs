@@ -91,7 +91,7 @@ namespace GymManagementPL.Controllers
                 return RedirectToAction(nameof(Index));
             }
             var member = _memberService.GetMemberToUpdate(id);
-            if (member == null) 
+            if (member == null)
             {
                 TempData["ErrorMessage"] = " Member Not Found ";
                 return RedirectToAction(nameof(Index));
@@ -112,6 +112,39 @@ namespace GymManagementPL.Controllers
             else
             {
                 TempData["ErrorMessage"] = "Member Update Failed";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        //Delete Member
+        public ActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = " Id of Member Can Not Be 0 Or Negative ";
+                return RedirectToAction(nameof(Index));
+            }
+            var memberDetails = _memberService.GetMemberDetails(id);
+            if (memberDetails == null)
+            {
+                TempData["ErrorMessage"] = " Member Not Found ";
+                return RedirectToAction(nameof(Index));
+            }
+            ViewBag.MemberId = id;
+            ViewBag.MemberName = memberDetails.Name;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeleteConfirmed([FromForm]int id)
+        {
+            var result = _memberService.DeleteMember(id);
+            if (result == true)
+            {
+                TempData["SuccessMessage"] = " Member Deleted Successfully ";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Member Deletion Failed";
             }
             return RedirectToAction(nameof(Index));
         }

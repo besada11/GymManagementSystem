@@ -32,17 +32,20 @@ namespace GymManagementBLL.Services.Classes
         //Delete Member
         public bool DeleteMember(int memberId)
         {
-            var MemberRepo= _unitOfWork.GetRepository<Member>();  
-            var MemberShipRepo= _unitOfWork.GetRepository<MemberShip>();
-
+            var MemberRepo= _unitOfWork.GetRepository<Member>();
+            var MemberShipRepo = _unitOfWork.GetRepository<MemberShip>();
             var member = MemberRepo.GetById(memberId);
-            if (member == null) return false;
-            var HasActiveMemberSession = _unitOfWork.GetRepository<MemberSession>()
-                .GetAll(ms => ms.MemberId == memberId && ms.Session.StartDate > DateTime.Now).Any();
-            
-            if (HasActiveMemberSession) return false;
 
-            var memberShips =MemberShipRepo .GetAll(ms => ms.MemberId == memberId);
+            if (member == null) return false;
+
+            var SessionId = _unitOfWork.GetRepository<MemberSession>()
+                .GetAll(ms => ms.MemberId == memberId).Select(ms => ms.SessionId);
+
+            var HasFutureSessions = _unitOfWork.GetRepository<Session>()
+                .GetAll(s => SessionId.Contains(s.Id) && s.StartDate > DateTime.Now).Any();
+            if (HasFutureSessions) return false;
+
+            var memberShips =MemberShipRepo.GetAll(ms => ms.MemberId == memberId);
             try
             {
                 if(memberShips.Any())
