@@ -2,6 +2,7 @@
 using GymManagementBLL.ViewModels.MemberViewModels;
 using GymManagementDAL.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace GymManagementPL.Controllers
 {
@@ -58,6 +59,7 @@ namespace GymManagementPL.Controllers
             return View();
         }
 
+        //Create Member
         [HttpPost]
         public ActionResult CreateMember(CreateMemberVM member)
         {
@@ -75,6 +77,41 @@ namespace GymManagementPL.Controllers
             {
                 TempData["ErrorMessage"] = "Email or Phone number already exists";
                 return View(nameof(Create), member);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        //Edit Member
+        [HttpGet]
+        public ActionResult MemberEdit(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = " Id of Member Can Not Be 0 Or Negative ";
+                return RedirectToAction(nameof(Index));
+            }
+            var member = _memberService.GetMemberToUpdate(id);
+            if (member == null) 
+            {
+                TempData["ErrorMessage"] = " Member Not Found ";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(member);
+        }
+        [HttpPost]
+        public ActionResult MemberEdit([FromRoute] int id, MemberToUpdateVM member)
+        {
+            if (!ModelState.IsValid)
+                return View(member);
+
+            var result = _memberService.UpdateMemberDetails(id, member);
+            if (result == true)
+            {
+                TempData["SuccessMessage"] = " Member Updated Successfully ";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Member Update Failed";
             }
             return RedirectToAction(nameof(Index));
         }
