@@ -31,12 +31,16 @@ namespace GymManagementBLL
                 .ForMember(dest => dest.Address, option => option.MapFrom(src => src))
                 .ForMember(dest => dest.HealthRecord, option => option.MapFrom(src => src.HealthRecordVM));
 
+
             CreateMap <CreateMemberVM, Address>()
                 .ForMember(dest => dest.BuildingNumber, option => option.MapFrom(src => src.BuildingNumber))
                 .ForMember(dest => dest.Street, option => option.MapFrom(src => src.Street))
                 .ForMember(dest => dest.City, option => option.MapFrom(src => src.City));
 
-            CreateMap<HealthRecordVM, HealthRecord>().ReverseMap()
+            CreateMap<HealthRecordVM, HealthRecord>()
+                .ForMember(dest => dest.Note, option => option.MapFrom(src => src.Notes));
+
+            CreateMap<HealthRecord, HealthRecordVM>()
                 .ForMember(dest => dest.Notes, option => option.MapFrom(src => src.Note));
 
 
