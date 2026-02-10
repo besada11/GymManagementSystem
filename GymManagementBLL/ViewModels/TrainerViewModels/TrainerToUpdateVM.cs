@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GymManagementBLL.ViewModels.TrainerViewModels
 {
-    internal class TrainerToUpdateVM
+    public class TrainerToUpdateVM
     {
         public  string Name { get; set; } = null!;
 

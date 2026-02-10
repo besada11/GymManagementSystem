@@ -84,7 +84,8 @@ namespace GymManagementBLL
             CreateMap<Trainer, TrainerToUpdateVM>()
                 .ForMember(dest => dest.BuildingNumber, option => option.MapFrom(src => src.Address.BuildingNumber))
                 .ForMember(dest => dest.Street, option => option.MapFrom(src => src.Address.Street))
-                .ForMember(dest => dest.City, option => option.MapFrom(src => src.Address.City));
+                .ForMember(dest => dest.City, option => option.MapFrom(src => src.Address.City))
+                .ForMember(dest => dest.Specialties, option => option.MapFrom(src => src.Specialties));
 
             CreateMap<TrainerToUpdateVM, Trainer>()
                 .ForMember(dest => dest.Name, option => option.Ignore())
@@ -93,6 +94,7 @@ namespace GymManagementBLL
                     dest.Address.BuildingNumber = src.BuildingNumber;
                     dest.Address.Street = src.Street;
                     dest.Address.City = src.City;
+                    dest.Specialties = src.Specialties;
                     dest.UpdatedAt = DateTime.Now;
                 });
 

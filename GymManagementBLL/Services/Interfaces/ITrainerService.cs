@@ -5,7 +5,7 @@ using System.Text;
 
 namespace GymManagementBLL.Services.Interfaces
 {
-    internal interface ITrainerService
+    public interface ITrainerService
     {
         //Get All Trainers
         IEnumerable<TrainerVM> GetAllTrainers();

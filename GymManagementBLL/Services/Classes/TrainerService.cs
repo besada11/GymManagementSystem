@@ -10,7 +10,7 @@ using System.Text;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class TrainerService (IUnitOfWork _unitOfWork , IMapper _mapper) : ITrainerService
+    public class TrainerService (IUnitOfWork _unitOfWork , IMapper _mapper) : ITrainerService
     {
         //Create Trainer
         public bool CreateTrainer(CreateTrainerVM createTrainerVM)

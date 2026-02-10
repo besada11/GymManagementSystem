@@ -6,7 +6,7 @@ using System.Text;
 
 namespace GymManagementBLL.ViewModels.TrainerViewModels
 {
-    internal class CreateTrainerVM
+    public class CreateTrainerVM
     {
         [Required(ErrorMessage = "Name is required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Name must be between 2 and 50 characters long")]
