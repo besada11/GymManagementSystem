@@ -1,6 +1,7 @@
 using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.TrainerViewModels;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace GymManagementPL.Controllers
 {
@@ -73,9 +74,9 @@ namespace GymManagementPL.Controllers
             return View(trainer);
         }
         [HttpPost]
-        public ActionResult Edit([FromRoute]int id , TrainerToUpdateVM trainerVM)
+        public ActionResult Edit([FromRoute] int id, TrainerToUpdateVM trainerVM)
         {
-           if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(trainerVM);
 
             var result = _trainerService.UpdateTrainerDetails(id, trainerVM);
@@ -89,5 +90,39 @@ namespace GymManagementPL.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-    } 
+
+        //Delete Trainer
+        public ActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = " Id of Trainer Can Not Be 0 Or Negative ";
+                return RedirectToAction(nameof(Index));
+            }
+            var result = _trainerService.GetTrainerDetails(id);
+            if (result == null)
+            {
+                TempData["ErrorMessage"] = "Trainer Delete Failed. It may be due to existing future sessions.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.TrainerName = result.Name;
+            ViewBag.TrainerId = id;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var result = _trainerService.DeleteTrainerDetails(id);
+            if (result)
+            {
+                TempData["SuccessMessage"] = " Trainer Deleted Successfully ";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Trainer Delete Failed. It may be due to existing future sessions.";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+    }
 }
