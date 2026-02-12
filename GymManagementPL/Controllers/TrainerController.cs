@@ -14,15 +14,15 @@ namespace GymManagementPL.Controllers
         }
 
         //Get Details of Trainer by Id
-        public ActionResult Details( int id)
+        public ActionResult Details(int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 TempData["ErrorMessage"] = " Id of Trainer Can Not Be 0 Or Negative ";
                 return RedirectToAction(nameof(Index));
             }
             var trainer = _trainerService.GetTrainerDetails(id);
-            if(trainer == null)
+            if (trainer == null)
             {
                 TempData["ErrorMessage"] = " Trainer Not Found ";
                 return RedirectToAction(nameof(Index));
@@ -38,13 +38,13 @@ namespace GymManagementPL.Controllers
         [HttpPost]
         public ActionResult CreateTrainer(CreateTrainerVM trainerVM)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("DataInvalid", "Check Data And Missing Field");
                 return View(nameof(Create), trainerVM);
             }
-            var result = _trainerService.CreateTrainer(trainerVM); 
-            if(result)
+            var result = _trainerService.CreateTrainer(trainerVM);
+            if (result)
             {
                 TempData["SuccessMessage"] = " Trainer Created Successfully ";
                 return RedirectToAction(nameof(Index));
@@ -55,8 +55,39 @@ namespace GymManagementPL.Controllers
                 return View(nameof(Create), trainerVM);
             }
         }
-    }
 
-    //Edit Trainer
+        //Edit Trainer
+        public ActionResult Edit(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = " Id of Trainer Can Not Be 0 Or Negative ";
+                return RedirectToAction(nameof(Index));
+            }
+            var trainer = _trainerService.GetTrainerToUpdate(id);
+            if (trainer == null)
+            {
+                TempData["ErrorMessage"] = " Trainer Not Found ";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(trainer);
+        }
+        [HttpPost]
+        public ActionResult Edit([FromRoute]int id , TrainerToUpdateVM trainerVM)
+        {
+           if(!ModelState.IsValid)
+                return View(trainerVM);
 
+            var result = _trainerService.UpdateTrainerDetails(id, trainerVM);
+            if (result)
+            {
+                TempData["SuccessMessage"] = " Trainer Updated Successfully ";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Email or Phone number already exists";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+    } 
 }
