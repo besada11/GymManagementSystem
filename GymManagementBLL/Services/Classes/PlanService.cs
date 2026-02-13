@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.PlanViewModels;
 using GymManagementDAL.Entities;
@@ -9,7 +9,7 @@ using System.Text;
 
 namespace GymManagementBLL.Services.Classes
 {
-    internal class PlanService(IUnitOfWork _unitOfWork , IMapper _mapper) : IPlanService
+    public class PlanService(IUnitOfWork _unitOfWork , IMapper _mapper) : IPlanService
     {
         //Get All Plans
         public IEnumerable<PlanVM> GetAllPlan()

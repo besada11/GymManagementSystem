@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace GymManagementBLL.ViewModels.PlanViewModels
 {
-    internal class UpdatePlanVM
+    public class UpdatePlanVM
     {
         public string PlanName { get; set; } = null!;
 
