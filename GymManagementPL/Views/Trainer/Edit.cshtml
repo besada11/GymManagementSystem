@@ -15,6 +15,7 @@
                         <small class="text-muted d-block mb-1">Editing Profile For</small>
                         <h4 class="mb-0 text-black">@Model.Name</h4>
                     </div>
+					@Html.ValidationMessage("DataInvalid", new { @class = "text-danger mb-3" })
                     <form asp-action="Edit" method="post">
                             <input readonly hidden asp-for="Name" />
                         <!-- Personal Information -->
