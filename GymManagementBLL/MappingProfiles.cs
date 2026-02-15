@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using GymManagementBLL.ViewModels.MemberViewModels;
 using GymManagementBLL.ViewModels.PlanViewModels;
 using GymManagementBLL.ViewModels.SessionViewModels;
@@ -22,6 +22,9 @@ namespace GymManagementBLL
 
             CreateMap<CreateSessionVM, Session>();
             CreateMap<Session , UpdateSessionVM>().ReverseMap();
+            CreateMap<Trainer, TrainerSelectVM>();
+            CreateMap<Category, CategorySelectVM>()
+                .ForMember(dest => dest.Name, option => option.MapFrom(src => src.CategoryName));
 
             #endregion
 
@@ -115,6 +118,7 @@ namespace GymManagementBLL
                 });
 
             #endregion
+
         }
     }
 }

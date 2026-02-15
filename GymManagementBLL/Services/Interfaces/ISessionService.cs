@@ -1,4 +1,4 @@
-﻿using GymManagementBLL.ViewModels.SessionViewModels;
+using GymManagementBLL.ViewModels.SessionViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,5 +24,11 @@ namespace GymManagementBLL.Services.Interfaces
 
         //Delete Session
         bool DeleteSession(int id);
+
+        //Get Trainer's Sessions
+        IEnumerable<TrainerSelectVM>GetTrainerForDropdown();
+
+        //Get Category's Sessions
+        IEnumerable<CategorySelectVM>GetCategoryForDropdown();
     }
 }

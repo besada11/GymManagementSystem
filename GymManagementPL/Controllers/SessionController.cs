@@ -1,32 +1,74 @@
 using GymManagementBLL.Services.Interfaces;
+using GymManagementBLL.ViewModels.SessionViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GymManagementPL.Controllers
 {
     public class SessionController(ISessionService _sessionService) : Controller
     {
         // Get all sessions
-        public IActionResult Index()
+        public ActionResult Index()
         {
             var sessions = _sessionService.GetAllSessions();
             return View(sessions);
         }
 
         //Details of a session
-        public IActionResult Details(int id)
+        public ActionResult Details(int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 TempData["ErrorMessage"] = "Invalid session ID.";
                 return RedirectToAction("Index");
             }
             var session = _sessionService.GetSessionByID(id);
-            if(session == null)
+            if (session == null)
             {
                 TempData["ErrorMessage"] = "Session not found.";
                 return RedirectToAction("Index");
             }
             return View(session);
         }
+
+        //Create a session  
+        public ActionResult Create()
+        {
+           LoadDropdowns();
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Create(CreateSessionVM createSession)
+        {
+            if (!ModelState.IsValid)
+            {
+                LoadDropdowns();
+                return View(createSession);
+            }
+            var isCreated = _sessionService.CreateSession(createSession);
+            if (isCreated)
+            {
+                TempData["SuccessMessage"] = "Session created successfully.";
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to create session. Please try again.";
+                LoadDropdowns();
+                return View(createSession);
+            }
+        }
+
+        #region Helper Methods
+            private void LoadDropdowns()
+            {
+                var trainers = _sessionService.GetTrainerForDropdown();
+                var categories = _sessionService.GetCategoryForDropdown();
+                ViewBag.Trainers = new SelectList(trainers, "Id", "Name");
+                ViewBag.Categories = new SelectList(categories, "Id", "Name");
+            }
+
+        #endregion
     }
 }

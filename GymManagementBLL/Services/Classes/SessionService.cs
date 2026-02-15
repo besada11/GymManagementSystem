@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.SessionViewModels;
 using GymManagementDAL.Entities;
@@ -127,7 +127,25 @@ namespace GymManagementBLL.Services.Classes
             }
         }
 
+        //Get Trainer Sessions
+        public IEnumerable<TrainerSelectVM> GetTrainerForDropdown()
+        {
+            var trainers = _unitOfWork.GetRepository<Trainer>().GetAll();
+            if (!trainers.Any()) return [];
+            //mapping trainers to trainerSelectVM
+            var mapTrainers = _mapper.Map<IEnumerable<TrainerSelectVM>>(trainers);
+            return mapTrainers;
+        }
 
+        //Get Category Sessions
+        public IEnumerable<CategorySelectVM> GetCategoryForDropdown()
+        {
+            var categories = _unitOfWork.GetRepository<Category>().GetAll();
+            if (!categories.Any()) return [];
+            //mapping categories to categorySelectVM
+            var mapCategories = _mapper.Map<IEnumerable<CategorySelectVM>>(categories);
+            return mapCategories;
+        }
 
         #region Helpers
 
@@ -148,7 +166,7 @@ namespace GymManagementBLL.Services.Classes
         //Validate session dates
         private bool IsValidSessionDates(DateTime startDate, DateTime endDate)
         {
-            return startDate < endDate;
+            return endDate > startDate && DateTime.Now > startDate;
         }
 
         //Is Session Available To Update
