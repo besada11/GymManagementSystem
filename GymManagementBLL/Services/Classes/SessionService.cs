@@ -166,7 +166,7 @@ namespace GymManagementBLL.Services.Classes
         //Validate session dates
         private bool IsValidSessionDates(DateTime startDate, DateTime endDate)
         {
-            return endDate > startDate && DateTime.Now > startDate;
+            return endDate > startDate && DateTime.Now < startDate;
         }
 
         //Is Session Available To Update

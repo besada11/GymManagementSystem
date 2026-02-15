@@ -34,7 +34,8 @@ namespace GymManagementPL.Controllers
         //Create a session  
         public ActionResult Create()
         {
-           LoadDropdowns();
+           LoadDropdownsForCategories();
+           LoadDropdownsForTrainers();
             return View();
         }
         [HttpPost]
@@ -42,7 +43,8 @@ namespace GymManagementPL.Controllers
         {
             if (!ModelState.IsValid)
             {
-                LoadDropdowns();
+                LoadDropdownsForCategories();
+                LoadDropdownsForTrainers();
                 return View(createSession);
             }
             var isCreated = _sessionService.CreateSession(createSession);
@@ -55,19 +57,60 @@ namespace GymManagementPL.Controllers
             else
             {
                 TempData["ErrorMessage"] = "Failed to create session. Please try again.";
-                LoadDropdowns();
+                LoadDropdownsForCategories();
+                LoadDropdownsForTrainers();
                 return View(createSession);
             }
         }
 
-        #region Helper Methods
-            private void LoadDropdowns()
+        // Edit a session
+        public ActionResult Edit (int id)
+        {
+            if (id <= 0)
             {
-                var trainers = _sessionService.GetTrainerForDropdown();
-                var categories = _sessionService.GetCategoryForDropdown();
-                ViewBag.Trainers = new SelectList(trainers, "Id", "Name");
-                ViewBag.Categories = new SelectList(categories, "Id", "Name");
+                TempData["ErrorMessage"] = "Invalid session ID.";
+                return RedirectToAction("Index");
             }
+            var session = _sessionService.GetSessionToUpdate(id);
+            if (session == null)
+            {
+                TempData["ErrorMessage"] = "Session not found.";
+                return RedirectToAction("Index");
+            }
+            LoadDropdownsForTrainers();
+            return View(session);
+        }
+        [HttpPost]
+        public ActionResult Edit ([FromRoute]int id , UpdateSessionVM updateSession)
+        {
+            if (!ModelState.IsValid)
+            {
+                LoadDropdownsForTrainers();
+                return View(updateSession);
+            }
+            var isUpdated = _sessionService.UpdateSession(updateSession,id);
+            if (isUpdated)
+            {
+                TempData["SuccessMessage"] = "Session updated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update session. Please try again.";
+            }
+            return RedirectToAction("Index");
+        }
+
+        #region Helper Methods
+        private void LoadDropdownsForTrainers()
+        {
+            var trainers = _sessionService.GetTrainerForDropdown();
+            ViewBag.Trainers = new SelectList(trainers, "Id", "Name");
+        }
+         private void LoadDropdownsForCategories()
+         {
+             var categories = _sessionService.GetCategoryForDropdown();
+             ViewBag.Categories = new SelectList(categories, "Id", "Name");
+         }
 
         #endregion
     }
