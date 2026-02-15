@@ -87,7 +87,5 @@ namespace GymManagementPL.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
-        
     }
 }
