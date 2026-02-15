@@ -66,5 +66,28 @@ namespace GymManagementPL.Controllers
                 return View(updatePlan);
             }
         }
+
+        //Activate or Deactivate plan
+        [HttpPost]
+        public ActionResult Activate(int id)
+        {
+            if(id <= 0)
+            {
+                TempData["ErrorMessage"] = "Invalid plan ID.";
+                return RedirectToAction(nameof(Index));
+            }
+            var plan = _planService.ToggleStatus(id);
+            if (plan)
+            {
+                TempData["SuccessMessage"] = "Plan status updated successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to update plan status.";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        
     }
 }
