@@ -100,6 +100,38 @@ namespace GymManagementPL.Controllers
             return RedirectToAction("Index");
         }
 
+        // Delete a session
+        public ActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErrorMessage"] = "Invalid session ID.";
+                return RedirectToAction("Index");
+            }
+            var session = _sessionService.GetSessionByID(id);
+            if (session==null)
+            {
+                TempData["ErrorMessage"] = "Failed to delete session. Please try again.";
+                return RedirectToAction("Index");
+            }
+            ViewBag.SessionId = session.Id;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var isDeleted = _sessionService.DeleteSession(id);
+            if (isDeleted)
+            {
+                TempData["SuccessMessage"] = "Session deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to delete session. Please try again.";
+            }
+            return RedirectToAction("Index");
+        }
+
         #region Helper Methods
         private void LoadDropdownsForTrainers()
         {
