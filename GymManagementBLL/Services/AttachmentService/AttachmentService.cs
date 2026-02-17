@@ -28,7 +28,7 @@ namespace GymManagementBLL.Services.AttachmentService
                 if (!allowedExtensions.Contains(extension))
                     return null;
 
-                var folderPath = Path.Combine(_webHost.WebRootPath, "images", folderName);
+                var folderPath = Path.Combine(_webHost.WebRootPath, folderName);
                 if (!Directory.Exists(folderPath))
                 {
                     Directory.CreateDirectory(folderPath);
@@ -40,7 +40,7 @@ namespace GymManagementBLL.Services.AttachmentService
                 using var stream = new FileStream(filePath, FileMode.Create);
                 file.CopyTo(stream);
 
-                return filePath;
+                return fileName;
             }
             catch (Exception ex)
             {
@@ -57,7 +57,7 @@ namespace GymManagementBLL.Services.AttachmentService
                 if (string.IsNullOrEmpty(folderName) || string.IsNullOrEmpty(fileName))
                     return false;   
 
-                var filePath = Path.Combine(_webHost.WebRootPath, "images", folderName, fileName);
+                var filePath = Path.Combine(_webHost.WebRootPath, folderName, fileName);
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);

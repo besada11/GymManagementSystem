@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace GymManagementBLL.ViewModels.MemberViewModels
 {
@@ -9,6 +10,9 @@ namespace GymManagementBLL.ViewModels.MemberViewModels
     {
         public string Name { get; set; } = null!;
         public string? Photo { get; set; }
+
+        [Display(Name = "Profile Photo")]
+        public IFormFile? PhotoFile { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
