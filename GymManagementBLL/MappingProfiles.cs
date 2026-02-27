@@ -1,11 +1,11 @@
 using AutoMapper;
+using GymManagementBLL.ViewModels.MemberShipsViewModels;
 using GymManagementBLL.ViewModels.MemberViewModels;
 using GymManagementBLL.ViewModels.PlanViewModels;
 using GymManagementBLL.ViewModels.SessionViewModels;
 using GymManagementBLL.ViewModels.TrainerViewModels;
 using GymManagementDAL.Entities;
-using Microsoft.Data.SqlClient;
-using System.Runtime.CompilerServices;
+using Microsoft.JSInterop;
 
 namespace GymManagementBLL
 {
@@ -116,6 +116,19 @@ namespace GymManagementBLL
                 {
                     dest.UpdatedAt = DateTime.Now;
                 });
+
+            #endregion
+
+            #region MemberShip
+
+            CreateMap<MemberShip, MemberShipVM>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.PlanName, opt => opt.MapFrom(src => src.Plan.Name))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.CreatedAt));
+
+            CreateMap<CreateMemberShipVM, MemberShip>();
+            CreateMap<Plan, PlanForSelectListVM>();
+            CreateMap<Member, MemberForSelectListVM>();
 
             #endregion
 

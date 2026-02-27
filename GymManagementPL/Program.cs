@@ -35,6 +35,8 @@ namespace GymManagementPL
             builder.Services.AddScoped<ISessionService, SessionService>();
             builder.Services.AddScoped<IAttachmentService, AttachmentService>();
             builder.Services.AddScoped<IAccountService , AccountService>();
+            builder.Services.AddScoped<IMemeberShipReopsitory, MemberShipRepository>();
+            builder.Services.AddScoped<IMemberShipService, MemberShipService>();
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(Config =>
             {
                 Config.User.RequireUniqueEmail = true;
