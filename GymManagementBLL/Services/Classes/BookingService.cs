@@ -1,5 +1,7 @@
 using AutoMapper;
 using GymManagementBLL.Services.Interfaces;
+using GymManagementBLL.ViewModels.BookingViewModels;
+using GymManagementBLL.ViewModels.MemberShipsViewModels;
 using GymManagementBLL.ViewModels.SessionViewModels;
 using GymManagementDAL.Repositories.Interfaces;
 
@@ -17,6 +19,13 @@ namespace GymManagementBLL.Services.Classes
                 session.AvailableSlots = session.Capacity - _unitOfWork.SessionRepository.GetAvailableSessions(session.Id);
             }
             return SessionVMs;
+        }
+        public IEnumerable<MemberForSessionVM> GetAllMemberForUpComingSession(int sessionId)
+        {
+            var bookingRepo = _unitOfWork.BookingRepository;
+            var membersForSession = bookingRepo.GetSessionsById(sessionId);
+            var memberForSessionMap= _mapper.Map<IEnumerable<MemberForSessionVM>>(membersForSession);
+            return memberForSessionMap;
         }
     }
 }

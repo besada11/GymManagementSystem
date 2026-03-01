@@ -1,4 +1,5 @@
 using AutoMapper;
+using GymManagementBLL.ViewModels.BookingViewModels;
 using GymManagementBLL.ViewModels.MemberShipsViewModels;
 using GymManagementBLL.ViewModels.MemberViewModels;
 using GymManagementBLL.ViewModels.PlanViewModels;
@@ -129,6 +130,14 @@ namespace GymManagementBLL
             CreateMap<CreateMemberShipVM, MemberShip>();
             CreateMap<Plan, PlanForSelectListVM>();
             CreateMap<Member, MemberForSelectListVM>();
+
+            #endregion
+
+            #region Booking Mappings
+            CreateMap<MemberSession, MemberForSessionVM>()
+                .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
+                .ForMember(dest => dest.BookingDate, opt => opt.MapFrom(src => src.CreatedAt.ToString()));
+
 
             #endregion
 
