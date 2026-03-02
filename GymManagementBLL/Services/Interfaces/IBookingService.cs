@@ -12,7 +12,7 @@ namespace GymManagementBLL.Services.Interfaces
         //Get All session
         IEnumerable<SessionVM> GetAllSessionWithTrainerAndCategory();
 
-        IEnumerable<MemberForSessionVM> GetAllMemberForUpComingSession(int sessionId);
+        IEnumerable<MemberForSessionVM> GetAllMemberForSession(int sessionId);
 
     }
 }

@@ -56,7 +56,7 @@
                             <td>@member.BookingDate</td>
                             <td>
                                 <div class="d-flex justify-content-center gap-1">
-                                    <form method="post" href="memberSession/cancel" class="m-0">
+                                    <form method="post" asp-action="Cancel" class="m-0">
                                         <button type="submit" class="btn btn-sm btn-danger"
                                                 onclick="return confirm('Are you sure you want to cancel this booking?');">
                                             <i class="fas fa-times"></i> Cancel
@@ -81,7 +81,7 @@
         }
     </div>
 
-    <a href="memberSession/index" class="btn btn-fill ">Back to List</a>
+    <a asp-action="Index" class="btn btn-fill ">Back to List</a>
 
 </div>
 @* <script>
@@ -94,6 +94,18 @@
                 setTimeout(() => alertBox.remove(), 500);
             }, 1500);
         });
+    });
+</script> *@
+@* <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const alertBox = document.getElementById("Alert");
+        if (alertBox) {
+            setTimeout(() => {
+                alertBox.style.transition = "opacity 0.5s ease";
+                alertBox.style.opacity = "0";
+                setTimeout(() => alertBox.remove(), 500);
+            }, 1500);
+        }
     });
 </script> *@
 <script>

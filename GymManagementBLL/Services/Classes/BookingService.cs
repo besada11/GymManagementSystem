@@ -20,12 +20,13 @@ namespace GymManagementBLL.Services.Classes
             }
             return SessionVMs;
         }
-        public IEnumerable<MemberForSessionVM> GetAllMemberForUpComingSession(int sessionId)
+        public IEnumerable<MemberForSessionVM> GetAllMemberForSession(int sessionId)
         {
             var bookingRepo = _unitOfWork.BookingRepository;
             var membersForSession = bookingRepo.GetSessionsById(sessionId);
             var memberForSessionMap= _mapper.Map<IEnumerable<MemberForSessionVM>>(membersForSession);
             return memberForSessionMap;
         }
+
     }
 }
