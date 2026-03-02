@@ -6,6 +6,7 @@ using GymManagementBLL.ViewModels.PlanViewModels;
 using GymManagementBLL.ViewModels.SessionViewModels;
 using GymManagementBLL.ViewModels.TrainerViewModels;
 using GymManagementDAL.Entities;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.JSInterop;
 
 namespace GymManagementBLL
@@ -136,8 +137,10 @@ namespace GymManagementBLL
             #region Booking Mappings
             CreateMap<MemberSession, MemberForSessionVM>()
                 .ForMember(dest => dest.MemberName, opt => opt.MapFrom(src => src.Member.Name))
-                .ForMember(dest => dest.BookingDate, opt => opt.MapFrom(src => src.CreatedAt.ToString()));
+                .ForMember(dest => dest.BookingDate, opt => opt.MapFrom(src => src.CreatedAt.ToString()))
+                .ForMember(dest => dest.IsActive, opt => opt.MapFrom(src => src.IsAttended));
 
+            CreateMap<CreateBookingVM, MemberSession>();
 
             #endregion
 

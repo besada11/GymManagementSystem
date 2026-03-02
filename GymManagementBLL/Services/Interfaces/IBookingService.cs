@@ -14,5 +14,11 @@ namespace GymManagementBLL.Services.Interfaces
 
         IEnumerable<MemberForSessionVM> GetAllMemberForSession(int sessionId);
 
+        public bool CreateBooking(CreateBookingVM model);
+       
+        IEnumerable<MemberForSelectListVM> GetAllMembersForSelectList(int sessionId);
+
+        bool MemberAttended(MemberAttendOrCancelVM model);
+        bool CancelBooking(MemberAttendOrCancelVM model);
     }
 }
